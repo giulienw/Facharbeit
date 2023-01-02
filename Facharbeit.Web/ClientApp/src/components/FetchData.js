@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import authService from './api-authorization/AuthorizeService'
 
 export class FetchData extends Component {
   static displayName = FetchData.name;
@@ -14,7 +15,7 @@ export class FetchData extends Component {
 
   static renderForecastsTable(forecasts) {
     return (
-      <table className="table table-striped" aria-labelledby="tableLabel">
+      <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
           <tr>
             <th>Date</th>
@@ -44,7 +45,7 @@ export class FetchData extends Component {
 
     return (
       <div>
-        <h1 id="tableLabel">Weather forecast</h1>
+        <h1 id="tabelLabel" >Weather forecast</h1>
         <p>This component demonstrates fetching data from the server.</p>
         {contents}
       </div>
@@ -52,7 +53,10 @@ export class FetchData extends Component {
   }
 
   async populateWeatherData() {
-    const response = await fetch('weatherforecast');
+    const token = await authService.getAccessToken();
+    const response = await fetch('weatherforecast', {
+      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+    });
     const data = await response.json();
     this.setState({ forecasts: data, loading: false });
   }
