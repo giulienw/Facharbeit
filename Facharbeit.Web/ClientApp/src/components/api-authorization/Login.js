@@ -21,7 +21,7 @@ export class Login extends Component {
     const action = this.props.action;
     switch (action) {
       case LoginActions.Login:
-        this.login(this.getReturnUrl());
+        //this.login(this.getReturnUrl());
         break;
       case LoginActions.LoginCallback:
         this.processLoginCallback();
@@ -51,7 +51,50 @@ export class Login extends Component {
     } else {
       switch (action) {
         case LoginActions.Login:
-          return (<div>Processing login</div>);
+          return (
+          <div className="row">
+            <div className="col-md-4">
+              <section>
+                <form id="account" method="post" action="api/login">
+                  <h2>Use a local account to log in.</h2>
+                  <hr/>
+                  <div className="form-floating">
+                    <label htmlFor="Email" className="form-label">Email</label>
+                    <input name="Email" className="form-control" autoComplete="username" aria-required="true"/>
+                    
+                  </div>
+                  <div className="form-floating">
+                    <label htmlFor="Password" className="form-label">Password</label>
+                    <input name="Password" className="form-control" autoComplete="current-password"
+                           aria-required="true"/>
+                  </div>
+                  <div>
+                    <div className="checkbox">
+                      <label for="RememberMe" className="form-label">
+                        <input className="form-check-input" name="RememberMe"/>
+                        RememberMe
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    <button id="login-submit" type="submit" className="w-100 btn btn-lg btn-primary">Log in</button>
+                  </div>
+                  <div>
+                    <p>
+                      <a id="forgot-password" href="./ForgotPassword">Forgot your password?</a>
+                    </p>
+                    <p>
+                      <a href="./Register">Register as a new user</a>
+                    </p>
+                    <p>
+                      <a id="resend-confirmation" href="./ResendEmailConfirmation">Resend email confirmation</a>
+                    </p>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+          );
         case LoginActions.LoginCallback:
           return (<div>Processing login callback</div>);
         case LoginActions.Profile:
