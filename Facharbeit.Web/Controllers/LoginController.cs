@@ -1,14 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using Facharbeit.Web.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ILogger = Microsoft.Build.Framework.ILogger;
 
 namespace Facharbeit.Web.Controllers;
 
+[Authorize]
 [Route("api/login")]
-public class LoginController : Controller
+[ApiController]
+public class LoginController : ControllerBase
 {
     public IList<AuthenticationScheme> ExternalLogins { get; set; }
     public InputModel Input { get; set; }
@@ -47,7 +50,8 @@ public class LoginController : Controller
         _signInManager = signInManager;
         _logger = logger;
     }
-    // GET
+    
+    [HttpPost]
     public async Task<IActionResult> Index(string returnUrl = "")
     {
         returnUrl ??= Url.Content("~/");

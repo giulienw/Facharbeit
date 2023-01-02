@@ -3,6 +3,7 @@ import { Component } from 'react';
 import authService from './AuthorizeService';
 import { AuthenticationResultStatus } from './AuthorizeService';
 import { LoginActions, QueryParameterNames, ApplicationPaths } from './ApiAuthorizationConstants';
+import 'bootstrap/dist/css/bootstrap.css';
 
 // The main responsibility of this component is to handle the user's login process.
 // This is the starting point for the login process. Any component that needs to authenticate
@@ -55,7 +56,7 @@ export class Login extends Component {
           <div className="row">
             <div className="col-md-4">
               <section>
-                <form id="account" method="post" action="api/login">
+                <form id="account" method="post" action="api/login" className="form-inline">
                   <h2>Use a local account to log in.</h2>
                   <hr/>
                   <div className="form-floating">
@@ -70,7 +71,7 @@ export class Login extends Component {
                   </div>
                   <div>
                     <div className="checkbox">
-                      <label for="RememberMe" className="form-label">
+                      <label htmlFor="RememberMe" className="form-label">
                         <input className="form-check-input" name="RememberMe"/>
                         RememberMe
                       </label>
