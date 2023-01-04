@@ -22,7 +22,6 @@ export const LoginActions = {
 export const ApplicationPaths = {
   DefaultLoginRedirectPath: '/',
   ApiAuthorizationClientConfigurationUrl: `_configuration/${ApplicationName}`,
-  ApiAuthorizationPrefix: prefix,
   Login: `${LoginActions.Login}`,
   LoginFailed: `${LoginActions.LoginFailed}`,
   LoginCallback: `${LoginActions.LoginCallback}`,
