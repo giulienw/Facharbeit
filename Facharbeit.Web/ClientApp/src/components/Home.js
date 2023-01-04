@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
+import authService from './api-authorization/AuthorizeService';
 
 export class Home extends Component {
   static displayName = Home.name;
 
+  async test() {
+      const token = await authService.getAccessToken();
+      console.log(token)
+  }
+  
   render() {
+      this.test();
     return (
       <div>
         <h1>Hello, world!</h1>

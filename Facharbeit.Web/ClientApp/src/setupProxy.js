@@ -8,7 +8,7 @@ const context =  [
   "/weatherforecast",
   "/_configuration",
   "/.well-known",
-  "/Identity",
+  "/auth",
   "/connect",
   "/ApplyDatabaseMigrations",
   "/_framework"
