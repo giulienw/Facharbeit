@@ -2,11 +2,12 @@ import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizati
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
+import AuthorizeRoute from "./components/api-authorization/AuthorizeRoute";
 
 const AppRoutes = [
   {
     index: true,
-    element: <Home />
+    element: <AuthorizeRoute path = "/" component = {Home} />
   },
   {
     path: '/counter',

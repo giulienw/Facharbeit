@@ -68,6 +68,7 @@ export class AuthorizeService {
 
         // PopUps might be blocked by the user, fallback to redirect
         try {
+          console.log(state)
           await this.userManager.signinRedirect(this.createArguments(state));
           return this.redirect();
         } catch (redirectError) {
@@ -185,6 +186,7 @@ export class AuthorizeService {
     }
 
     let settings = await response.json();
+    console.log(settings);
     settings.automaticSilentRenew = true;
     settings.includeIdTokenInSilentRenew = true;
     settings.userStore = new WebStorageStateStore({

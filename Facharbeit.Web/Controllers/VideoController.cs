@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Facharbeit.Web.Models;
+using Facharbeit.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,30 +11,27 @@ namespace Facharbeit.Web.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class VideoController : ControllerBase
 {
     private ILogger<VideoController> _logger { get; set; }
+    private VideoManager _videoManager { get; set; }
 
-    public VideoController(ILogger<VideoController> logger)
+    public VideoController(ILogger<VideoController> logger, VideoManager videoManager)
     {
         _logger = logger;
+        _videoManager = videoManager;
     }
 
-    private static readonly string[] Summaries = new[]
+    [HttpPost]
+    public async Task<IEnumerable<Video>> GetAllVideos()
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        return await _videoManager.GetAllVideos();
+    }
 
-    [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpPost]
+    public async Task<Video> GetVideo(int id)
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+        return await _videoManager.GetVideoByIdAsync(id);
     }
 }
