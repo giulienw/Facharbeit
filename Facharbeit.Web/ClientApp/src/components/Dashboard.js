@@ -44,7 +44,7 @@ export class Dashboard extends Component {
                                                 </select></div>
                                             </div>
                                         </div>
-                                        <a href="/login" className="authLinks redButton"
+                                        <a href="/browse" className="authLinks redButton"
                                            data-uia="header-login-link">Einloggen</a></div>
                                 </div>
                                 <div className="our-story-cards" data-uia-nmhp="our-story-cards">
