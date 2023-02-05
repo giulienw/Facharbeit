@@ -8,12 +8,12 @@ const context =  [
   "/weatherforecast",
   "/_configuration",
   "/.well-known",
-  "/auth",
   "/connect",
   "/ApplyDatabaseMigrations",
   "/_framework",
   "/api",
-  "/Auth"
+  "/Identity",
+  "/cdn"
 ];
 
 module.exports = function(app) {

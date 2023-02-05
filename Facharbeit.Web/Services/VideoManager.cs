@@ -8,28 +8,32 @@ namespace Facharbeit.Web.Services;
 
 public interface IVideoManager : IDisposable
 {
-    Task<List<Video>> GetAllVideos(CancellationToken cancellationToken = default(CancellationToken));
-    Task<IdentityResult> CreateAsync(Video video, CancellationToken cancellationToken = default(CancellationToken));
-    Task<IdentityResult> UpdateAsync(Video video, CancellationToken cancellationToken = default(CancellationToken));
-    Task<IdentityResult> DeleteAsync(Video video, CancellationToken cancellationToken = default(CancellationToken));
-    Task<Video> GetVideoByIdAsync(int id, CancellationToken cancellationToken = default(CancellationToken));
-    Task<Video> GetVideoByNameAsync(string name, CancellationToken cancellationToken = default(CancellationToken));
-    Task<List<Genre>> GetGenresAsync(int videoID, CancellationToken cancellationToken = default(CancellationToken));
-    Task<List<Genre>> GetGenresAsync(Video video, CancellationToken cancellationToken = default(CancellationToken));
+    Task<List<Video>> GetAllVideos();
+    Task<IdentityResult> CreateAsync(Video video);
+    Task<IdentityResult> CreateGenreAsync(Genre genre);
+    Task<IdentityResult> UpdateAsync(Video video);
+    Task<IdentityResult> DeleteAsync(Video video);
+    Task<Video> GetVideoByIdAsync(int id);
+    Task<Video> GetVideoByNameAsync(string name);
+    Task<List<Genre>> GetGenresAsync(int videoID);
+    Task<List<Genre>> GetGenresAsync(Video video);
+
+    Task<IdentityResult> AddToGenreAsync(Video video, string genreName);
+
+    Task<bool> IsInGenreAsync(Video video, string genreName);
+    Task<List<Video>> GetVideosByTypeAsync(VideoType type);
 }
 
 public class VideoManager : IVideoManager
 {
     private bool _disposed;
+    protected virtual CancellationToken CancellationToken => CancellationToken.None;
 
-    private ApplicationDbContext Context;
-    private DbSet<Genre> Genres { get { return Context.Set<Genre>(); } }
-    private DbSet<VideoGenre> VideoGenres { get { return Context.Set<VideoGenre>(); } }
-    private DbSet<Video> Videos { get { return Context.Set<Video>(); } }
+    private IVideoStore Store;
 
     public IdentityErrorDescriber ErrorDescriber { get; set; }
 
-    public VideoManager(ApplicationDbContext context, IdentityErrorDescriber describer = null)
+    public VideoManager(IVideoStore store, IdentityErrorDescriber describer = null)
     {
         if (describer == null)
         {
@@ -38,117 +42,154 @@ public class VideoManager : IVideoManager
 
         ErrorDescriber = describer;
 
-        if (context == null)
+        if (store == null)
         {
-            throw new ArgumentNullException(nameof(context));
+            throw new ArgumentNullException(nameof(store));
         }
-        Context = context;
+        Store = store;
     }
 
-    public bool AutoSaveChanges { get; set; } = true;
 
-    protected Task SaveChanges(CancellationToken cancellationToken)
+    public async Task<IdentityResult> CreateAsync(Video video)
     {
-        return AutoSaveChanges ? Context.SaveChangesAsync(cancellationToken) : Task.CompletedTask;
-    }
-
-    public async Task<IdentityResult> CreateAsync(Video video, CancellationToken cancellationToken = default(CancellationToken))
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        ThrowIfDisposed();
-        if (video == null)
-        {
-            throw new ArgumentNullException(nameof(video));
-        }
-        Context.Add(video);
-        await SaveChanges(cancellationToken);
-        return IdentityResult.Success;
-    }
-    public async Task<IdentityResult> UpdateAsync(Video video, CancellationToken cancellationToken = default(CancellationToken))
-    {
-        cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
         if (video == null)
         {
             throw new ArgumentNullException(nameof(video));
         }
 
-        Context.Attach(video);
-        Context.Update(video);
-        try
-        {
-            await SaveChanges(cancellationToken);
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
-        }
-        return IdentityResult.Success;
+        return await Store.CreateAsync(video,CancellationToken);
     }
-
-    public async Task<IdentityResult> DeleteAsync(Video video, CancellationToken cancellationToken = default(CancellationToken))
+    
+    public async Task<IdentityResult> CreateGenreAsync(Genre genre)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfDisposed();
+        if (genre == null)
+        {
+            throw new ArgumentNullException(nameof(genre));
+        }
+
+        return await Store.CreateGenreAsync(genre,CancellationToken);
+    }
+    
+    /*
+    public async Task<IdentityResult> CreateEpisodeAsync(Episode episode)
+    {
+        ThrowIfDisposed();
+        if (episode == null)
+        {
+            throw new ArgumentNullException(nameof(episode));
+        }
+
+        return await Store.CreateEpisode(episode);
+    }*/
+    public async Task<IdentityResult> UpdateAsync(Video video)
+    {
         ThrowIfDisposed();
         if (video == null)
         {
             throw new ArgumentNullException(nameof(video));
         }
 
-        Context.Remove(video);
-        try
+        return await Store.UpdateAsync(video,CancellationToken);
+    }
+
+    public async Task<IdentityResult> DeleteAsync(Video video)
+    {
+        ThrowIfDisposed();
+        if (video == null)
         {
-            await SaveChanges(cancellationToken);
+            throw new ArgumentNullException(nameof(video));
         }
-        catch (DbUpdateConcurrencyException)
-        {
-            return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
-        }
-        return IdentityResult.Success;
+
+        return await Store.DeleteAsync(video,CancellationToken);
     }
 
-    public async Task<Video> GetVideoByIdAsync(int id, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<Video> GetVideoByIdAsync(int id)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-        ThrowIfDisposed();
-        var videos = await Videos.ToListAsync();
-        var video = videos.FirstOrDefault(v => v.ID == id);
-        video.Genres = await GetGenresAsync(video, cancellationToken);
-        return video;
-    }
-
-    public async Task<Video?> GetVideoByNameAsync(string Name, CancellationToken cancellationToken = default(CancellationToken))
-    {
-        cancellationToken.ThrowIfCancellationRequested();
         ThrowIfDisposed();
 
-        var video = (await Videos.ToListAsync()).FirstOrDefault(v => v.Name == Name);
-        video.Genres = await GetGenresAsync(video, cancellationToken);
-        return video;
+        return await Store.GetVideoByIdAsync(id);
     }
 
-    public async Task<List<Video>> GetAllVideos(CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<Video?> GetVideoByNameAsync(string name)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfDisposed();
+        
+        return await Store.GetVideoByNameAsync(name);
+    }
+
+    public async Task<List<Video>> GetAllVideos()
+    {
         ThrowIfDisposed();
 
-        return await Videos.ToListAsync<Video>(cancellationToken).ConfigureAwait(false);
+        return await Store.GetAllVideos();
     }
 
-    public async Task<List<Genre>> GetGenresAsync(int videoID, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<List<Genre>> GetGenresAsync(int videoID)
     {
-        var query = from videoGenre in VideoGenres
-                    join genre in Genres on videoGenre.GenreID equals genre.ID
-                    where videoGenre.VideoID.Equals(videoID)
-                    select genre;
-        return await query.ToListAsync(cancellationToken).ConfigureAwait(false);
+        return await Store.GetGenresAsync(videoID);
     }
 
-    public async Task<List<Genre>> GetGenresAsync(Video video, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<List<Genre>> GetGenresAsync(Video video)
     {
         return await GetGenresAsync(video.ID);
     }
+    
+    public async Task<IdentityResult> AddToGenreAsync(Video video, string genreName)
+    {
+        ThrowIfDisposed();
+        if (video == null)
+        {
+            throw new ArgumentNullException(nameof(video));
+        }
+        if (string.IsNullOrWhiteSpace(genreName))
+        {
+            throw new ArgumentException("Value cannot be null or empty.", nameof(genreName));
+        }
 
+        await Store.AddToGenreAsync(video, genreName);
+        return await Store.UpdateAsync(video);
+    }
+
+    /*public async Task<IdentityResult> RemoveFromGenreAsync(Video video, string genreName, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfDisposed();
+        if (video == null)
+        {
+            throw new ArgumentNullException(nameof(video));
+        }
+        if (string.IsNullOrWhiteSpace(genreName))
+        {
+            throw new ArgumentException("Value cannot be null or empty.", nameof(genreName));
+        }
+
+        await Store.RemoveFromGenreAsync(video, genreName);
+        return await Store.UpdateAsync(video);
+    }*/
+    public async Task<bool> IsInGenreAsync(Video video, string genreName)
+    {
+        ThrowIfDisposed();
+        if (video == null)
+        {
+            throw new ArgumentNullException(nameof(video));
+        }
+        if (string.IsNullOrWhiteSpace(genreName))
+        {
+            throw new ArgumentException("Value cannot be null or empty.", nameof(genreName));
+        }
+
+        return await Store.IsInGenreAsync(video, genreName);
+    }
+
+    public async Task<List<Video>> GetVideosByTypeAsync(VideoType type)
+    {   ThrowIfDisposed();
+        if (type == null)
+            throw new ArgumentNullException(nameof(type));
+
+        return await Store.GetVideosByTypeAsync(type, CancellationToken);
+    }
 
     protected void ThrowIfDisposed()
     {
