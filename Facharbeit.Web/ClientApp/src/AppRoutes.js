@@ -1,6 +1,4 @@
 import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
 import AuthorizeRoute from "./components/api-authorization/AuthorizeRoute";
 import {Browse} from "./components/Browse";
 import {Dashboard} from "./components/Dashboard";
