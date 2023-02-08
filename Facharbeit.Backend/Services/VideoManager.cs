@@ -1,10 +1,8 @@
-using AutoMapper.Internal;
-using Facharbeit.Web.Data;
-using Facharbeit.Web.Models;
+using Facharbeit.Backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Facharbeit.Web.Services;
+namespace Facharbeit.Backend.Services;
 
 public interface IVideoManager : IDisposable
 {

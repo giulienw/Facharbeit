@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Facharbeit.Web.Models;
+namespace Facharbeit.Backend.Models;
 
 public class ApplicationUser : IdentityUser
 {

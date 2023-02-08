@@ -1,5 +1,7 @@
 services:
   db:
+    ports: 
+      - 1433:1433
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: Password123
@@ -13,4 +15,18 @@ services:
         interval: 10s
         retries: 10
         start_period: 10s
-        timeout: 3s     
+        timeout: 3s    
+    volumes:
+      - ./Facharbeit-202325-15-52-14.bak :/var/opt/mssql/data
+  web:
+    build: Facharbeit.Web/
+    ports:
+      - 7084:7084
+      - 5230:5230
+    volumes:
+      - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https/
+    environment:
+      ASPNETCORE_URLS: "https://localhost:7084;http://localhost:5230" 
+      ASPNETCORE_ENVIRONMENT: "Development" 
+      ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: "Microsoft.AspNetCore.SpaProxy"

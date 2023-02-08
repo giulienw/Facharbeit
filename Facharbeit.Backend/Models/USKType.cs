@@ -1,4 +1,4 @@
-namespace Facharbeit.Web.Models;
+namespace Facharbeit.Backend.Models;
 
 public enum USKType
 {

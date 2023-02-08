@@ -11,6 +11,7 @@
     <SpaProxyServerUrl>https://localhost:44463</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +32,9 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
@@ -166,6 +170,7 @@
     <_ContentIncludedByDefault Remove="Pages\Auth\_ViewImports.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controllers" />
     <Folder Include="wwwroot\cdn" />
   </ItemGroup>
 

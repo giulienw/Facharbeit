@@ -1,17 +1,17 @@
 using System.ComponentModel.DataAnnotations;
-using Facharbeit.Web.Models;
-using Facharbeit.Web.Services;
+using Facharbeit.Backend.Models;
+using Facharbeit.Backend.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ILogger = Microsoft.Build.Framework.ILogger;
 
-namespace Facharbeit.Web.Controllers;
+namespace Facharbeit.Backend.Controllers;
 
 [ApiController]
 [AllowAnonymous]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class VideoController : ControllerBase
 {
     private ILogger<VideoController> _logger { get; set; }

@@ -1,9 +1,9 @@
-using Facharbeit.Web.Data;
-using Facharbeit.Web.Models;
+//using Facharbeit.Backend.Data;
+using Facharbeit.Backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Facharbeit.Web.Services;
+namespace Facharbeit.Backend.Services;
 
 public interface IVideoStore : IDisposable
 {
@@ -29,7 +29,7 @@ public class VideoStore : IVideoStore
 {
     private bool _disposed;
 
-    private ApplicationDbContext Context;
+    private DBContext Context;
     private DbSet<Genre> Genres { get { return Context.Set<Genre>(); } }
     private DbSet<VideoGenre> VideoGenres { get { return Context.Set<VideoGenre>(); } }
     private DbSet<Video> Videos { get { return Context.Set<Video>(); } }
@@ -37,7 +37,7 @@ public class VideoStore : IVideoStore
 
     public IdentityErrorDescriber ErrorDescriber { get; set; }
 
-    public VideoStore(ApplicationDbContext context, IdentityErrorDescriber describer = null)
+    public VideoStore(DBContext context, IdentityErrorDescriber describer = null)
     {
         if (describer == null)
         {
