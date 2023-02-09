@@ -9,7 +9,6 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     # If you really want to use MS SQL Server, uncomment the following line
     #image: mcr.microsoft.com/mssql/server
-    restart: always 
     volumes:
       - ./Facharbeit-202325-15-52-14.bak :/var/opt/mssql/data
   web:
