@@ -1,0 +1,8 @@
+spec:
+  name: Facharbeit
+  services:
+  - dockerfile_path: Dockerfile
+    git:
+      branch: develop
+      repo_clone_url: giulienw/Facharbeit
+    name: Facharbeit

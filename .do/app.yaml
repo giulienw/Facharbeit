@@ -1,0 +1,8 @@
+name: facharbeit
+services:
+- dockerfile_path: Dockerfile
+  github:
+    branch: develop
+    deploy_on_push: true
+    repo: giulienw/Facharbeit
+  name: facharbeit
