@@ -6,7 +6,7 @@ services:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: Password123
     # mssql server image isn't available for arm64 architecture, so we use azure-sql instead
-    image: mcr.microsoft.com/azure-sql-edge:latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     # If you really want to use MS SQL Server, uncomment the following line
     #image: mcr.microsoft.com/mssql/server
     restart: always
@@ -19,14 +19,10 @@ services:
     volumes:
       - ./Facharbeit-202325-15-52-14.bak :/var/opt/mssql/data
   web:
-    build: Facharbeit.Web/
+    build: Facharbeit.Backend/
     ports:
-      - 7084:7084
-      - 5230:5230
+      - 80:80
+      - 443:443
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
-    environment:
-      ASPNETCORE_URLS: "https://localhost:7084;http://localhost:5230" 
-      ASPNETCORE_ENVIRONMENT: "Development" 
-      ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: "Microsoft.AspNetCore.SpaProxy"
