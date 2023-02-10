@@ -74,10 +74,10 @@ namespace Facharbeit.Backend.Models
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("USK")
+                    b.Property("USK")
                         .HasColumnType("int");
 
-                    b.Property<int>("VideoType")
+                    b.Property("VideoType")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
