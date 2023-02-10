@@ -13,6 +13,8 @@ services:
     volumes:
       - ./Facharbeit.SQL/ :/var/opt/mssql/data/
   web:
+    depends_on:
+      - db
     build: Facharbeit.Backend/
     ports:
       - 80:80
