@@ -28,18 +28,10 @@ public class VideoManager : IVideoManager
     protected virtual CancellationToken CancellationToken => CancellationToken.None;
 
     private IVideoStore Store;
+    
 
-    public IdentityErrorDescriber ErrorDescriber { get; set; }
-
-    public VideoManager(IVideoStore store, IdentityErrorDescriber describer = null)
+    public VideoManager(IVideoStore store)
     {
-        if (describer == null)
-        {
-            throw new ArgumentNullException(nameof(describer));
-        }
-
-        ErrorDescriber = describer;
-
         if (store == null)
         {
             throw new ArgumentNullException(nameof(store));

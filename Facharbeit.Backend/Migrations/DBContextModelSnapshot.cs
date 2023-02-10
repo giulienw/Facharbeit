@@ -48,7 +48,7 @@ namespace Facharbeit.Backend.Migrations
 
                     b.HasIndex("VideoID");
 
-                    b.ToTable("Episode");
+                    b.ToTable("Episodes");
                 });
 
             modelBuilder.Entity("Facharbeit.Backend.Models.Video", b =>
@@ -79,7 +79,7 @@ namespace Facharbeit.Backend.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Video");
+                    b.ToTable("Videos");
                 });
 
             modelBuilder.Entity("Facharbeit.Backend.Models.VideoGenre", b =>
@@ -100,7 +100,7 @@ namespace Facharbeit.Backend.Migrations
 
                     b.HasIndex("VideoID");
 
-                    b.ToTable("VideoGenre");
+                    b.ToTable("VideoGenres");
                 });
 
             modelBuilder.Entity("Facharbeit.Backend.Models.Episode", b =>
@@ -127,6 +127,34 @@ namespace Facharbeit.Backend.Migrations
 
                     b.Navigation("VideoGenres");
                 });
+            
+            modelBuilder.Entity("Facharbeit.Backend.Models.Genre", b =>
+            {
+                b.Property<int>("ID")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                b.Property<string>("Label")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.HasKey("ID");
+
+                b.ToTable("Genres");
+            });
+            
+            modelBuilder.Entity("Facharbeit.Backend.Models.VideoGenre", b =>
+            {
+                b.HasOne("Facharbeit.Backend.Models.Video", null)
+                    .WithMany("VideoGenres")
+                    .HasForeignKey("VideoID")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 #pragma warning restore 612, 618
         }
     }

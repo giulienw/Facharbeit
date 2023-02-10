@@ -51,7 +51,7 @@ namespace Facharbeit.Backend.Migrations
 
                     b.HasIndex("VideoID");
 
-                    b.ToTable("Episode");
+                    b.ToTable("Episodes");
                 });
 
             modelBuilder.Entity("Facharbeit.Backend.Models.Video", b =>
@@ -82,7 +82,7 @@ namespace Facharbeit.Backend.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Video");
+                    b.ToTable("Videos");
                 });
 
             modelBuilder.Entity("Facharbeit.Backend.Models.VideoGenre", b =>
@@ -103,7 +103,7 @@ namespace Facharbeit.Backend.Migrations
 
                     b.HasIndex("VideoID");
 
-                    b.ToTable("VideoGenre");
+                    b.ToTable("VideoGenres");
                 });
 
             modelBuilder.Entity("Facharbeit.Backend.Models.Episode", b =>

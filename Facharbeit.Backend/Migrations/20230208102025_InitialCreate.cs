@@ -11,7 +11,7 @@ namespace Facharbeit.Backend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Video",
+                name: "Videos",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -28,7 +28,7 @@ namespace Facharbeit.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Episode",
+                name: "Episodes",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -50,7 +50,7 @@ namespace Facharbeit.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "VideoGenre",
+                name: "VideoGenres",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -84,13 +84,13 @@ namespace Facharbeit.Backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Episode");
+                name: "Episodes");
 
             migrationBuilder.DropTable(
-                name: "VideoGenre");
+                name: "VideoGenres");
 
             migrationBuilder.DropTable(
-                name: "Video");
+                name: "Videos");
         }
     }
 }
